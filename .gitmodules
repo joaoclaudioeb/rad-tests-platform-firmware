@@ -14,3 +14,7 @@
 	path = linux/layers/meta-xilinx-tools
 	url = https://github.com/Xilinx/meta-xilinx-tools.git
 	branch = rel-v2023.1
+[submodule "linux/layers/meta-rad-tests"]
+	path = linux/layers/meta-rad-tests
+	url = https://github.com/joaoclaudioeb/meta-rad-tests
+	branch = refactor-to-yocto
