@@ -19,4 +19,5 @@ BBLAYERS ?= " \
   ${REPO_DIR}/layers/meta-openembedded/meta-filesystems \
   ${REPO_DIR}/layers/meta-flatsat2-bsp \
   ${REPO_DIR}/layers/meta-flatsat2 \
+  ${REPO_DIR}/layers/meta-rad-tests \
   "

@@ -19,7 +19,7 @@
 # You need to select a specific machine to target the build with. There are a selection
 # of emulated machines available which can boot and run in the QEMU emulator:
 #
-MACHINE ?= "microzed"
+MACHINE ?= "zedboard"
 
 # These are some of the more commonly used values. Looking at the files in the
 # meta/conf/machine directory, or the conf/machine directory of any additional layers
