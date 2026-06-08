@@ -15,8 +15,8 @@ endif
 
 JOBS ?= 8
 PROJ_NAME ?= flatsat2
-PLATFORM_NAME ?= floripasat-2
-HW_BOARD_NAME ?= microzed
+PLATFORM_NAME ?=
+HW_BOARD_NAME ?= zedboard
 
 VIV_PRJ_DIR = hw_project
 SDT_PRJ_DIR = hw_project_sdt
