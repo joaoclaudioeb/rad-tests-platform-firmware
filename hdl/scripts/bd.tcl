@@ -271,13 +271,22 @@ namespace eval fsat_bd {
         create_bd_port -dir O -type data spi0_ss_o
         create_bd_port -dir O -type data spi0_ss1_o
         create_bd_port -dir O -type data spi0_ss2_o
+        create_bd_port -dir O -type data spi0_ss3_o
+
+        set spi_decoder [create_bd_cell -type ip -vlnv spacelab.ufsc.br:ip:spi_cs_decoder:1.0 spi_cs_decoder_0]
 
         connect_bd_net [get_bd_ports spi0_sck_o] [get_bd_pins zynq_ps/spi0_sclk_o]
         connect_bd_net [get_bd_ports spi0_io1_i] [get_bd_pins zynq_ps/spi0_miso_i]
         connect_bd_net [get_bd_ports spi0_io0_o] [get_bd_pins zynq_ps/spi0_mosi_o]
-        connect_bd_net [get_bd_ports spi0_ss_o] [get_bd_pins zynq_ps/spi0_ss_o]
-        connect_bd_net [get_bd_ports spi0_ss1_o] [get_bd_pins zynq_ps/spi0_ss1_o]
-        connect_bd_net [get_bd_ports spi0_ss2_o] [get_bd_pins zynq_ps/spi0_ss2_o]
+
+        connect_bd_net [get_bd_pins $spi_decoder/ss0_n] [get_bd_pins zynq_ps/spi0_ss_o]
+        connect_bd_net [get_bd_pins $spi_decoder/ss1_n] [get_bd_pins zynq_ps/spi0_ss1_o]
+        connect_bd_net [get_bd_pins $spi_decoder/ss2_n] [get_bd_pins zynq_ps/spi0_ss2_o]
+
+        connect_bd_net [get_bd_ports spi0_ss_o] [get_bd_pins $spi_decoder/cs0_n]
+        connect_bd_net [get_bd_ports spi0_ss1_o] [get_bd_pins $spi_decoder/cs1_n]
+        connect_bd_net [get_bd_ports spi0_ss2_o] [get_bd_pins $spi_decoder/cs2_n]
+        connect_bd_net [get_bd_ports spi0_ss3_o] [get_bd_pins $spi_decoder/cs3_n]
 
         connect_bd_net [get_bd_pins xlconstant_1/dout] [get_bd_pins zynq_ps/spi0_ss_i]
         connect_bd_net [get_bd_pins xlconstant_0/dout] [get_bd_pins zynq_ps/spi0_sclk_i]

@@ -28,6 +28,7 @@ set_property -dict {PACKAGE_PIN V7 IOSTANDARD LVCMOS33} [get_ports ctrl_pins_tri
 set_property -dict {PACKAGE_PIN V4 IOSTANDARD LVCMOS33} [get_ports ctrl_pins_tri_io[10]]; # JD2_N
 set_property -dict {PACKAGE_PIN V5 IOSTANDARD LVCMOS33} [get_ports ctrl_pins_tri_io[11]]; # JD2_P
 set_property -dict {PACKAGE_PIN W5 IOSTANDARD LVCMOS33} [get_ports ctrl_pins_tri_io[12]]; # JD3_N
+set_property -dict {PACKAGE_PIN U6 IOSTANDARD LVCMOS33} [get_ports spi0_ss3_o]; # JD4_P
 
 # CAN
 set_property -dict {PACKAGE_PIN W12 IOSTANDARD LVCMOS33} [get_ports can_rx]; # JB1
