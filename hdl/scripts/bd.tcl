@@ -209,19 +209,25 @@ namespace eval fsat_bd {
         set iic_0 [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_0]
         set zynq_ps [create_zynq_ps "zedboard"]
 
-        # Create smartconnect
-        set smartconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:smartconnect:1.0 smartconnect_0]
+        # Create interconnect
+        set axi_gp0 [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_interconnect]
         set_property -dict [list \
-            CONFIG.NUM_SI {1} \
             CONFIG.NUM_MI {2} \
-        ] $smartconnect
+            CONFIG.NUM_SI {1} \
+        ] $axi_gp0
 
-        connect_bd_net [get_bd_pins zynq_ps/FCLK_CLK0] [get_bd_pins smartconnect_0/aclk]
-        connect_bd_intf_net [get_bd_intf_pins zynq_ps/M_AXI_GP0] [get_bd_intf_pins smartconnect_0/S00_AXI]
+        connect_bd_intf_net -intf_net gp0_interconnect [get_bd_intf_pins zynq_ps/M_AXI_GP0] [get_bd_intf_pins axi_cpu_interconnect/S00_AXI]
+        connect_bd_net [get_bd_pins zynq_ps/FCLK_CLK0] [get_bd_pins axi_cpu_interconnect/ACLK]
+        connect_bd_net [get_bd_pins zynq_ps/FCLK_CLK0] [get_bd_pins axi_cpu_interconnect/S00_ACLK]
+        connect_bd_net [get_bd_pins zynq_ps/FCLK_CLK0] [get_bd_pins axi_cpu_interconnect/M00_ACLK]
+        connect_bd_net [get_bd_pins zynq_ps/FCLK_CLK0] [get_bd_pins axi_cpu_interconnect/M01_ACLK]
 
         # Main processor reset
         set proc_sys_reset_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_0]
-        connect_bd_net [get_bd_pins proc_sys_reset_0/interconnect_aresetn] [get_bd_pins smartconnect_0/aresetn]
+        connect_bd_net [get_bd_pins proc_sys_reset_0/interconnect_aresetn] [get_bd_pins axi_cpu_interconnect/ARESETN]
+        connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins axi_cpu_interconnect/S00_ARESETN]
+        connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins axi_cpu_interconnect/M00_ARESETN]
+        connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins axi_cpu_interconnect/M01_ARESETN]
 
         # Ground for SDIO_WP
         set xlconstant_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_0]
@@ -246,11 +252,11 @@ namespace eval fsat_bd {
         connect_bd_intf_net -intf_net zynq_ps_fixed_io [get_bd_intf_ports fixed_io] [get_bd_intf_pins zynq_ps/FIXED_IO]
 
         # Create CAN BD pins
-        create_bd_port -dir I -type data can_rx
-        create_bd_port -dir O -type data can_tx
+        #create_bd_port -dir I -type data can_rx
+        #create_bd_port -dir O -type data can_tx
 
-        connect_bd_net [get_bd_ports can_rx] [get_bd_pins zynq_ps/can0_phy_rx]
-        connect_bd_net [get_bd_ports can_tx] [get_bd_pins zynq_ps/can0_phy_tx]
+        #connect_bd_net [get_bd_ports can_rx] [get_bd_pins zynq_ps/can0_phy_rx]
+        #connect_bd_net [get_bd_ports can_tx] [get_bd_pins zynq_ps/can0_phy_tx]
 
         # AXI IIC
         set axi_iic_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.1 axi_iic_0]
@@ -258,7 +264,7 @@ namespace eval fsat_bd {
             CONFIG.IIC_FREQ_KHZ {400} \
         ] $axi_iic_0
 
-        connect_bd_intf_net [get_bd_intf_pins axi_iic_0/S_AXI] [get_bd_intf_pins smartconnect_0/M00_AXI]
+        connect_bd_intf_net [get_bd_intf_pins axi_iic_0/S_AXI] [get_bd_intf_pins axi_cpu_interconnect/M00_AXI]
         connect_bd_net [get_bd_pins axi_iic_0/s_axi_aclk] [get_bd_pins zynq_ps/FCLK_CLK0]
         connect_bd_net [get_bd_pins axi_iic_0/s_axi_aresetn] [get_bd_pins proc_sys_reset_0/peripheral_aresetn]
         connect_bd_intf_net [get_bd_intf_pins iic_0] [get_bd_intf_pins axi_iic_0/IIC]
@@ -293,23 +299,23 @@ namespace eval fsat_bd {
         connect_bd_net [get_bd_pins xlconstant_0/dout] [get_bd_pins zynq_ps/spi0_mosi_i]
 
         # DAC spi interface
-        create_bd_port -dir O -type clk spi1_sck_o
-        create_bd_port -dir I -type data spi1_io1_i
-        create_bd_port -dir O -type data spi1_io0_o
-        create_bd_port -dir O -type data spi1_ss_o
-        create_bd_port -dir O -type data spi1_ss1_o
-        create_bd_port -dir O -type data spi1_ss2_o
+        #create_bd_port -dir O -type clk spi1_sck_o
+        #create_bd_port -dir I -type data spi1_io1_i
+        #create_bd_port -dir O -type data spi1_io0_o
+        #create_bd_port -dir O -type data spi1_ss_o
+        #create_bd_port -dir O -type data spi1_ss1_o
+        #create_bd_port -dir O -type data spi1_ss2_o
 
-        connect_bd_net [get_bd_ports spi1_sck_o] [get_bd_pins zynq_ps/spi1_sclk_o]
-        connect_bd_net [get_bd_ports spi1_io1_i] [get_bd_pins zynq_ps/spi1_miso_i]
-        connect_bd_net [get_bd_ports spi1_io0_o] [get_bd_pins zynq_ps/spi1_mosi_o]
-        connect_bd_net [get_bd_ports spi1_ss_o] [get_bd_pins zynq_ps/spi1_ss_o]
-        connect_bd_net [get_bd_ports spi1_ss1_o] [get_bd_pins zynq_ps/spi1_ss1_o]
-        connect_bd_net [get_bd_ports spi1_ss2_o] [get_bd_pins zynq_ps/spi1_ss2_o]
+        #connect_bd_net [get_bd_ports spi1_sck_o] [get_bd_pins zynq_ps/spi1_sclk_o]
+        #connect_bd_net [get_bd_ports spi1_io1_i] [get_bd_pins zynq_ps/spi1_miso_i]
+        #connect_bd_net [get_bd_ports spi1_io0_o] [get_bd_pins zynq_ps/spi1_mosi_o]
+        #connect_bd_net [get_bd_ports spi1_ss_o] [get_bd_pins zynq_ps/spi1_ss_o]
+        #connect_bd_net [get_bd_ports spi1_ss1_o] [get_bd_pins zynq_ps/spi1_ss1_o]
+        #connect_bd_net [get_bd_ports spi1_ss2_o] [get_bd_pins zynq_ps/spi1_ss2_o]
 
-        connect_bd_net [get_bd_pins xlconstant_1/dout] [get_bd_pins zynq_ps/spi1_ss_i]
-        connect_bd_net [get_bd_pins xlconstant_0/dout] [get_bd_pins zynq_ps/spi1_sclk_i]
-        connect_bd_net [get_bd_pins xlconstant_0/dout] [get_bd_pins zynq_ps/spi1_mosi_i]
+        #connect_bd_net [get_bd_pins xlconstant_1/dout] [get_bd_pins zynq_ps/spi1_ss_i]
+        #connect_bd_net [get_bd_pins xlconstant_0/dout] [get_bd_pins zynq_ps/spi1_sclk_i]
+        #connect_bd_net [get_bd_pins xlconstant_0/dout] [get_bd_pins zynq_ps/spi1_mosi_i]
 
         # GPIO EMIO and LEDS
         set slice [create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_leds]
@@ -338,7 +344,7 @@ namespace eval fsat_bd {
         ] [get_bd_cells axi_gpio_ctrl]
 
         # Configure Interconnect
-        connect_bd_intf_net [get_bd_intf_pins axi_gpio_ctrl/S_AXI] [get_bd_intf_pins smartconnect_0/M01_AXI]
+        connect_bd_intf_net [get_bd_intf_pins axi_gpio_ctrl/S_AXI] [get_bd_intf_pins axi_cpu_interconnect/M01_AXI]
         connect_bd_net [get_bd_pins axi_gpio_ctrl/s_axi_aclk] [get_bd_pins zynq_ps/FCLK_CLK0]
         connect_bd_net [get_bd_pins axi_gpio_ctrl/s_axi_aresetn] [get_bd_pins proc_sys_reset_0/peripheral_aresetn]
         connect_bd_intf_net [get_bd_intf_pins ctrl_pins] [get_bd_intf_pins axi_gpio_ctrl/GPIO]

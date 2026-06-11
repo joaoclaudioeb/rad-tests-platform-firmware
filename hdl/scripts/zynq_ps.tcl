@@ -350,9 +350,9 @@ namespace eval fsat_bd {
                 CONFIG.PCW_USE_FABRIC_INTERRUPT {1} \
                 CONFIG.PCW_USE_M_AXI_GP0 {1} \
                 CONFIG.PCW_CAN0_CAN0_IO {EMIO} \
-                CONFIG.PCW_CAN0_PERIPHERAL_ENABLE {1} \
+                CONFIG.PCW_CAN0_PERIPHERAL_ENABLE {0} \
                 CONFIG.PCW_SPI0_PERIPHERAL_ENABLE {1} \
-                CONFIG.PCW_SPI1_PERIPHERAL_ENABLE {1} \
+                CONFIG.PCW_SPI1_PERIPHERAL_ENABLE {0} \
                 CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0} \
                 CONFIG.PCW_IRQ_F2P_INTR {1} \
             ] $zynq_ps
