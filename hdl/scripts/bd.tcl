@@ -285,9 +285,9 @@ namespace eval fsat_bd {
         connect_bd_net [get_bd_ports spi0_io1_i] [get_bd_pins zynq_ps/spi0_miso_i]
         connect_bd_net [get_bd_ports spi0_io0_o] [get_bd_pins zynq_ps/spi0_mosi_o]
 
-        connect_bd_net [get_bd_pins $spi_decoder/ss0_n] [get_bd_pins zynq_ps/spi0_ss_o]
-        connect_bd_net [get_bd_pins $spi_decoder/ss1_n] [get_bd_pins zynq_ps/spi0_ss1_o]
-        connect_bd_net [get_bd_pins $spi_decoder/ss2_n] [get_bd_pins zynq_ps/spi0_ss2_o]
+        connect_bd_net [get_bd_pins $spi_decoder/ss0] [get_bd_pins zynq_ps/spi0_ss_o]
+        connect_bd_net [get_bd_pins $spi_decoder/ss1] [get_bd_pins zynq_ps/spi0_ss1_o]
+        connect_bd_net [get_bd_pins $spi_decoder/ss2] [get_bd_pins zynq_ps/spi0_ss2_o]
 
         connect_bd_net [get_bd_ports spi0_ss_o] [get_bd_pins $spi_decoder/cs0_n]
         connect_bd_net [get_bd_ports spi0_ss1_o] [get_bd_pins $spi_decoder/cs1_n]
